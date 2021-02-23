@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using sistema_financeiro_dio.Classes;
+using sistema_financeiro_dio.Entidades;
 using sistema_financeiro_dio.Enums;
 using sistema_financeiro_dio.Repositorios;
 

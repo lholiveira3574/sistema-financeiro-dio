@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using sistema_financeiro_dio.Classes;
+using sistema_financeiro_dio.Entidades;
 using sistema_financeiro_dio.Controllers;
 using sistema_financeiro_dio.Enums;
+using sistema_financeiro_dio.Entidades.Exceptions;
 
 namespace sistema_financeiro_dio
 {
@@ -11,40 +12,55 @@ namespace sistema_financeiro_dio
 		static ContaController contaController = new ContaController();
         static void Main(string[] args)
         {
-            string opcaoUsuario = ObterOpcaoUsuario();
-            
-            while (opcaoUsuario.ToUpper() != "X")
+            try
 			{
-				switch (opcaoUsuario)
+				string opcaoUsuario = ObterOpcaoUsuario();
+				
+				while (opcaoUsuario.ToUpper() != "X")
 				{
-					case "1":
-						ListarContas();
-						break;
-					case "2":
-						InserirConta();
-						break;
-					case "3":
-						Transferir();
-						break;
-					case "4":
-						Sacar();
-						break;
-					case "5":
-						Depositar();
-						break;
-                    case "C":
-						Console.Clear();
-						break;
+					switch (opcaoUsuario)
+					{
+						case "1":
+							ListarContas();
+							break;
+						case "2":
+							InserirConta();
+							break;
+						case "3":
+							Transferir();
+							break;
+						case "4":
+							Sacar();
+							break;
+						case "5":
+							Depositar();
+							break;
+						case "C":
+							Console.Clear();
+							break;
 
-					default:
-						throw new ArgumentOutOfRangeException();
+						default:
+							throw new DomainException("Opção selecionada é inválida");
+					}
+
+					opcaoUsuario = ObterOpcaoUsuario();
 				}
-
-				opcaoUsuario = ObterOpcaoUsuario();
+				
+				Console.WriteLine("Obrigado por utilizar nossos serviços.");
+				Console.ReadLine();
 			}
-			
-			Console.WriteLine("Obrigado por utilizar nossos serviços.");
-			Console.ReadLine();
+			catch (DomainException e)
+			{
+				Console.WriteLine("Operação abortada: {0}", e.Message);	
+			}
+			catch (FormatException e)
+			{
+				Console.WriteLine("O valor digitado é inválido: {0}", e.Message);
+			}
+			catch(Exception e)
+			{
+				Console.WriteLine("Erro inesperado: {0}", e.Message);
+			}
             
         }
 
@@ -101,7 +117,7 @@ namespace sistema_financeiro_dio
 			}
 			else
 			{
-				Console.WriteLine("Não foi possível realizar a operção. Saldo insuficiente!");	
+				Console.WriteLine("Não foi possível realizar a operação. Saldo insuficiente!");	
 			}
         }
 
@@ -128,7 +144,7 @@ namespace sistema_financeiro_dio
 			}
 			else
 			{
-				Console.WriteLine("Não foi possível realizar a operção. Saldo insuficiente!");	
+				Console.WriteLine("Não foi possível realizar a operação. Saldo insuficiente!");	
 			}
 
         }
@@ -141,6 +157,11 @@ namespace sistema_financeiro_dio
 
 			Console.Write("Digite 1 para Conta Fisica ou 2 para Juridica: ");
 			int tipoConta = int.Parse(Console.ReadLine());
+
+			if (!(tipoConta == 1 || tipoConta == 2)) 
+            {
+                throw new DomainException("Tipo da conta é inválido!");    
+            }
 
 			Console.Write("Digite o Nome do Cliente: ");
 			string Nome = Console.ReadLine();

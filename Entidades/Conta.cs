@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using sistema_financeiro_dio.Enums;
 
-namespace sistema_financeiro_dio.Classes
+namespace sistema_financeiro_dio.Entidades
 {
     public class Conta 
     {
-        private int Id { get; set; }
+        public int Id { get; private set; }
         private TipoConta TipoConta { get; set; }
         private double Saldo { get; set; }
         private double Credito { get; set; }
